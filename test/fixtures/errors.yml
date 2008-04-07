@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  resolution: MyString
+  feature_id: 1
+
+two:
+  resolution: MyString
+  feature_id: 1
