@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title></title>
+		<script src="openlayers/OpenLayers.js"></script>
+		<script src="http://openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+        	<script type="text/javascript">
+            	var map;
+            	function init(){
+            		map = new OpenLayers.Map('map',
+                    	{ maxExtent: new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508),
+                      		numZoomLevels: 18,
+                      		maxResolution: 156543,
+                      		units: 'm',
+                      		projection: "EPSG:41001" });
+
+            		var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+
+            		var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
+
+            		map.addLayers([layerMapnik,layerTah]);
+
+            		//var newl = new OpenLayers.Layer.Text( "My Points", { location:"./textfile.txt"} );
+            		//map.addLayer(newl);
+
+            		map.addControl(new OpenLayers.Control.LayerSwitcher());
+
+            		map.setCenter(lonLatToMercator(new OpenLayers.LonLat(3,46)), 6);
+        	}
+
+        	function lonLatToMercator(ll) {
+           		var lon = ll.lon * 20037508.34 / 180;
+           		var lat = Math.log(Math.tan((90 + ll.lat) * Math.PI / 360)) / (Math.PI / 180);
+           		lat = lat * 20037508.34 / 180;
+           		return new OpenLayers.LonLat(lon, lat);
+        	}
+        	</script>
+	</head>
+	<body onload="init()">
+		<%= yield %>
+	</body>
+</html>
