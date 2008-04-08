@@ -27,7 +27,7 @@ var icon = new OpenLayers.Icon('http://boston.openguides.org/markers/AQUA.png',s
 
 <%= @markers.size %>
 <% for marker in @markers do %>
-markers.addMarker(new OpenLayers.Marker(lonLatToMercator(new OpenLayers.LonLat(<%= marker[:lon] %>,<%= marker[:lat] %>))));
+markers.addMarker(new OpenLayers.Marker(lonLatToMercator(new OpenLayers.LonLat(<%= marker.lon %>,<%= marker.lat %>))));
 <% end %>
 
 

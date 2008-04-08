@@ -7,6 +7,7 @@ class Error < ActiveRecord::Base
   :modify => "modify"
   }
   validates_inclusion_of :resolution, :in => Resolutions.values
+  validates_presence_of :feature_id
   validates_associated :feature
   validates_presence_of :lon
   validates_numericality_of :lon
