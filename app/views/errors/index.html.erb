@@ -1,0 +1,38 @@
+<div id="map" style="width: 800px;height: 500px;border: 1px solid black;"></div>
+
+<script type="text/javascript">
+var map;
+
+map = new OpenLayers.Map('map',
+	{ maxExtent: new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508),
+	numZoomLevels: 18,
+	maxResolution: 156543,
+	units: 'd',
+	projection: "EPSG:41001" });
+
+
+var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+
+var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
+
+map.addLayers([layerMapnik,layerTah]);
+
+var markers = new OpenLayers.Layer.Markers( "Markers" );
+map.addLayer(markers);
+
+var size = new OpenLayers.Size(10,17);
+var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+var icon = new OpenLayers.Icon('http://boston.openguides.org/markers/AQUA.png',size,offset);
+//markers.addMarker(new OpenLayers.Marker(lonLatToMercator(new OpenLayers.LonLat(3,46))));
+
+<%= @markers.size %>
+<% for marker in @markers do %>
+markers.addMarker(new OpenLayers.Marker(lonLatToMercator(new OpenLayers.LonLat(<%= marker[:lon] %>,<%= marker[:lat] %>))));
+<% end %>
+
+
+map.addControl(new OpenLayers.Control.LayerSwitcher());
+
+map.setCenter(lonLatToMercator(new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>)), <%= @location[:zoom] %>);
+
+</script>
