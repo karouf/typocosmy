@@ -57,8 +57,8 @@ Proj4js = {
      * internal: http server path to library code.
      * TBD figure this out automatically
      */
-    libPath: '../lib/',
-	
+    //libPath: '../lib/',
+	libPath: 'openlayers/lib/proj4js/lib/',
 
     /** 
     * Method: transform(source, dest, point)

@@ -9,65 +9,22 @@ map = new OpenLayers.Map('map',
 	numZoomLevels: 18,
 	maxResolution: 156543,
 	units: 'm',
+	displayProjection: new OpenLayers.Projection('WGS84'),
 	projection: "EPSG:41001"});
+
 
 var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
 var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
 map.addLayers([layerMapnik,layerTah]);
 
 map.addControl(new OpenLayers.Control.LayerSwitcher());
+map.addControl(new OpenLayers.Control.Navigation());
 map.addControl(new OpenLayers.Control.PanZoomBar());
+map.addControl(new OpenLayers.Control.MousePosition({}));
 
-map.setCenter(lonLatToMercator(new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>)), <%= @location[:zoom] %>);
+var center = new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>);
+center.transform(new OpenLayers.Projection('WGS84'), map.getProjectionObject());
 
-var addmarkers = new OpenLayers.Layer.Markers( "Features to add" );
-map.addLayer(addmarkers);
-var modmarkers = new OpenLayers.Layer.Markers( "Features to modify" );
-map.addLayer(modmarkers);
-var delmarkers = new OpenLayers.Layer.Markers( "Features to delete" );
-map.addLayer(delmarkers);
-
-var size = new OpenLayers.Size(18,25);
-var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-var add_icon = new OpenLayers.Icon('openlayers/img/add-feature.png',size,offset);
-var modify_icon = new OpenLayers.Icon('openlayers/img/modify-feature.png',size,offset);
-var delete_icon = new OpenLayers.Icon('openlayers/img/delete-feature.png',size,offset);
-
-var popup;
-
-<% i = 0
-for marker in @markers do 
-i = i + 1
-case marker.resolution 
-when "add" %>
-icon = add_icon
-var markers = addmarkers
-
-<% when "modify" %>
-icon = modify_icon
-var markers = modmarkers;
-
-<% when "delete" %>
-icon = delete_icon
-var markers = delmarkers;
-
-<% end %>
-
-feature = new OpenLayers.Feature(layerMapnik, 
-                             		lonLatToMercator(new OpenLayers.LonLat(<%= marker.lon %>,<%= marker.lat %>)),
-									{icon: icon.clone()});
-									
-marker = feature.createMarker();
-markers.addMarker(marker);
-									
-popup<%= i %> = feature.createPopup(false);
-popup<%= i %>.setContentHTML("<%= "#{marker.resolution.capitalize} the #{marker.feature.name.downcase}." %>");
-popup<%= i %>.setSize(new OpenLayers.Size(100,100));
-popup<%= i %>.toggle();
-markers.map.addPopup(popup<%= i %>);
-marker.events.register("mousedown", popup<%= i %>, popup<%= i %>.toggle);
-<% end %>
-
-
+map.setCenter(center, <%= @location[:zoom] %>);
 
 </script>
