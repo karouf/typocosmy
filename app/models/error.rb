@@ -8,7 +8,7 @@ class Error < ActiveRecord::Base
   }
   validates_inclusion_of :resolution, :in => Resolutions.values
   validates_presence_of :feature_id
-  validates_associated :feature
+  #validates_associated :feature
   validates_presence_of :lon
   validates_numericality_of :lon
   validates_presence_of :lat
