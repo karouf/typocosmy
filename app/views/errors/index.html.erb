@@ -1,6 +1,7 @@
 <div id="map" style="width: 800px;height: 500px;border: 1px solid black;"></div>
 
 <script type="text/javascript">
+
 function updateMarkers() {
 	bbox = map.getExtent();
 	bbox.transform(map.getProjectionObject(), wgs84);
@@ -33,34 +34,9 @@ var delmarkers = new OpenLayers.Layer.Markers( "Features to delete" );
 map.addLayer(delmarkers);
 
 map.addControl(new OpenLayers.Control.LayerSwitcher());
-map.addControl(new OpenLayers.Control.Navigation());
-map.addControl(new OpenLayers.Control.PanZoomBar());
+map.addControl(new OpenLayers.Control.TypocosmyNavigation());
+map.addControl(new OpenLayers.Control.TypocosmyPanZoomBar());
 map.addControl(new OpenLayers.Control.MousePosition());
-
-var control = new OpenLayers.Control.DragPan();
-OpenLayers.Util.extend(control, {
-	draw: function() {
-        this.handler = new OpenLayers.Handler.Drag(this,
-                            {"move": this.panMap, "done": this.panMapDone});
-		this.handler.activate();
-    },
-
-    panMapDone: function(xy) {
-        if(this.panned) {
-            this.panMap(xy);
-            this.panned = false;
-			updateMarkers();
-        }
-    },
-
-	updateMarkers: function() {
-		bbox = map.getExtent();
-		bbox.transform(map.getProjectionObject(), wgs84);
-		
-        <%= remote_function(:with => "'zoom=' + map.zoom + '&left=' + bbox.left + '&bottom=' + bbox.bottom + '&right=' + bbox.right + '&top=' + bbox.top", :url => { :action => :update_markers }) %>
-    }
-});
-map.addControl(control);
 
 
 var center = new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>);
