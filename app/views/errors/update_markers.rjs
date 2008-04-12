@@ -1,0 +1,52 @@
+page << "for(i=0;i<addmarkers.map.popups.length;i++){
+  addmarkers.map.removePopup(addmarkers.map.popups[i]);
+}"
+
+page << "for(i=0;i<modmarkers.map.popups.length;i++){
+  modmarkers.map.removePopup(modmarkers.map.popups[i]);
+}"
+
+page << "for(i=0;i<delmarkers.map.popups.length;i++){
+  delmarkers.map.removePopup(delmarkers.map.popups[i]);
+}"
+
+page << "addmarkers.clearMarkers();"
+page << "modmarkers.clearMarkers();"
+page << "delmarkers.clearMarkers();"
+
+i = 0
+for error in @errors 
+  i = i + 1
+  case error.resolution 
+  when "add"
+    page << "icon = add_icon"
+    page << "var markers = addmarkers"
+
+  when "modify"
+    page << "icon = modify_icon"
+    page << "var markers = modmarkers"
+
+  when "delete"
+    page << "icon = delete_icon"
+    page << "var markers = delmarkers;"
+
+  end
+
+  page << "marker_coords = new OpenLayers.LonLat(#{error.lon}, #{error.lat});"
+  page << "marker_coords.transform(wgs84, map.getProjectionObject());"
+
+  page << "feature = new OpenLayers.Feature(layerMapnik, marker_coords, {icon: icon.clone()});"
+  page << "marker = feature.createMarker();"
+  page << "markers.addMarker(marker);"
+
+  page << "popup#{i} = feature.createPopup(false);"
+  page << "popup#{i}.setContentHTML('#{error.resolution.capitalize} the #{error.feature.name.downcase}.');"
+  
+  page << "markers.map.addPopup(popup#{i});"
+  page << "popup#{i}.hide();"
+  
+  page << "marker.events.register('mousedown', popup#{i}, popup#{i}.toggle);"
+  page << "popup#{i}.setSize(new OpenLayers.Size(100,100));"
+  
+
+end

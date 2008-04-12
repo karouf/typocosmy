@@ -1,7 +1,15 @@
 <div id="map" style="width: 800px;height: 500px;border: 1px solid black;"></div>
 
 <script type="text/javascript">
+function updateMarkers() {
+	bbox = map.getExtent();
+	bbox.transform(map.getProjectionObject(), wgs84);
+	
+    <%= remote_function(:with => "'zoom=' + map.zoom + '&left=' + bbox.left + '&bottom=' + bbox.bottom + '&right=' + bbox.right + '&top=' + bbox.top", :url => { :action => :update_markers }) %>
+}
+
 var map;
+wgs84 = new OpenLayers.Projection('WGS84')
 
 map = new OpenLayers.Map('map',
 	{ controls: [],
@@ -9,24 +17,13 @@ map = new OpenLayers.Map('map',
 	numZoomLevels: 18,
 	maxResolution: 156543,
 	units: 'm',
-	displayProjection: new OpenLayers.Projection('WGS84'),
+	displayProjection: wgs84,
 	projection: "EPSG:41001"});
 
-wgs84 = new OpenLayers.Projection('WGS84')
 
 var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
 var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
 map.addLayers([layerMapnik,layerTah]);
-
-map.addControl(new OpenLayers.Control.LayerSwitcher());
-map.addControl(new OpenLayers.Control.Navigation());
-map.addControl(new OpenLayers.Control.PanZoomBar());
-map.addControl(new OpenLayers.Control.MousePosition({}));
-
-var center = new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>);
-center.transform(wgs84, map.getProjectionObject());
-
-map.setCenter(center, <%= @location[:zoom] %>);
 
 var addmarkers = new OpenLayers.Layer.Markers( "Features to add" );
 map.addLayer(addmarkers);
@@ -35,43 +32,47 @@ map.addLayer(modmarkers);
 var delmarkers = new OpenLayers.Layer.Markers( "Features to delete" );
 map.addLayer(delmarkers);
 
+map.addControl(new OpenLayers.Control.LayerSwitcher());
+map.addControl(new OpenLayers.Control.Navigation());
+map.addControl(new OpenLayers.Control.PanZoomBar());
+map.addControl(new OpenLayers.Control.MousePosition());
+
+var control = new OpenLayers.Control.DragPan();
+OpenLayers.Util.extend(control, {
+	draw: function() {
+        this.handler = new OpenLayers.Handler.Drag(this,
+                            {"move": this.panMap, "done": this.panMapDone});
+		this.handler.activate();
+    },
+
+    panMapDone: function(xy) {
+        if(this.panned) {
+            this.panMap(xy);
+            this.panned = false;
+			updateMarkers();
+        }
+    },
+
+	updateMarkers: function() {
+		bbox = map.getExtent();
+		bbox.transform(map.getProjectionObject(), wgs84);
+		
+        <%= remote_function(:with => "'zoom=' + map.zoom + '&left=' + bbox.left + '&bottom=' + bbox.bottom + '&right=' + bbox.right + '&top=' + bbox.top", :url => { :action => :update_markers }) %>
+    }
+});
+map.addControl(control);
+
+
+var center = new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>);
+center.transform(wgs84, map.getProjectionObject());
+
+map.setCenter(center, <%= @location[:zoom] %>);
+
 var size = new OpenLayers.Size(18,25);
 var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
 var add_icon = new OpenLayers.Icon('openlayers/img/add-feature.png',size,offset);
 var modify_icon = new OpenLayers.Icon('openlayers/img/modify-feature.png',size,offset);
 var delete_icon = new OpenLayers.Icon('openlayers/img/delete-feature.png',size,offset);
 
-<% i = 0
-for error in @errors 
-i = i + 1
-case error.resolution 
-when "add" %>
-icon = add_icon
-var markers = addmarkers
-
-<% when "modify" %>
-icon = modify_icon
-var markers = modmarkers;
-
-<% when "delete" %>
-icon = delete_icon
-var markers = delmarkers;
-
-<% end %>
-
-marker_coords = new OpenLayers.LonLat(<%= error.lon %>,<%= error.lat %>);
-marker_coords.transform(wgs84, map.getProjectionObject());
-
-feature = new OpenLayers.Feature(layerMapnik, marker_coords, {icon: icon.clone()});
-marker = feature.createMarker();
-markers.addMarker(marker);
-
-popup<%= i %> = feature.createPopup(false);
-popup<%= i %>.setContentHTML("<%= "#{error.resolution.capitalize} the #{error.feature.name.downcase}." %>");
-markers.map.addPopup(popup<%= i %>);
-marker.events.register("mousedown", popup<%= i %>, popup<%= i %>.toggle);
-popup<%= i %>.setSize(new OpenLayers.Size(100,100));
-popup<%= i %>.toggle();
-<% end %>
-
+updateMarkers();
 </script>

@@ -1,8 +1,24 @@
 class ErrorsController < ApplicationController
 
 	def index
-		@location = {:lon => 3.0906, :lat => 45.7694, :zoom => 13}
-		@errors = Error.find(:all, :order => "created_at DESC", :limit => 3)	
+		@location = {:lon => 0.60769, :lat => 46.36152, :zoom => 6}
+		@errors = Error.find(:all,
+		                      :conditions => "lon > -5.23 AND lon < 8.49 AND lat > 42.69 AND lat < 49.8",
+		                      :order => "created_at DESC", :limit => 1)	
 	end
 
+  def update_markers
+    left = params[:left]
+    bottom= params[:bottom]
+    right = params[:right]
+    top = params[:top]
+    if params[:zoom].to_i >= 13
+      @errors = Error.find(:all,
+		                      :conditions => "lon > #{left} AND lon < #{right} AND lat > #{bottom} AND lat < #{top}")
+		else
+		  @errors = Error.find(:all,
+		                      :conditions => "lon > #{left} AND lon < #{right} AND lat > #{bottom} AND lat < #{top}",
+		                      :order => "created_at DESC", :limit => 3)
+		end
+  end
 end
