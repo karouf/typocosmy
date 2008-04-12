@@ -12,6 +12,7 @@ map = new OpenLayers.Map('map',
 	displayProjection: new OpenLayers.Projection('WGS84'),
 	projection: "EPSG:41001"});
 
+wgs84 = new OpenLayers.Projection('WGS84')
 
 var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
 var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
@@ -23,8 +24,54 @@ map.addControl(new OpenLayers.Control.PanZoomBar());
 map.addControl(new OpenLayers.Control.MousePosition({}));
 
 var center = new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>);
-center.transform(new OpenLayers.Projection('WGS84'), map.getProjectionObject());
+center.transform(wgs84, map.getProjectionObject());
 
 map.setCenter(center, <%= @location[:zoom] %>);
+
+var addmarkers = new OpenLayers.Layer.Markers( "Features to add" );
+map.addLayer(addmarkers);
+var modmarkers = new OpenLayers.Layer.Markers( "Features to modify" );
+map.addLayer(modmarkers);
+var delmarkers = new OpenLayers.Layer.Markers( "Features to delete" );
+map.addLayer(delmarkers);
+
+var size = new OpenLayers.Size(18,25);
+var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+var add_icon = new OpenLayers.Icon('openlayers/img/add-feature.png',size,offset);
+var modify_icon = new OpenLayers.Icon('openlayers/img/modify-feature.png',size,offset);
+var delete_icon = new OpenLayers.Icon('openlayers/img/delete-feature.png',size,offset);
+
+<% i = 0
+for error in @errors 
+i = i + 1
+case error.resolution 
+when "add" %>
+icon = add_icon
+var markers = addmarkers
+
+<% when "modify" %>
+icon = modify_icon
+var markers = modmarkers;
+
+<% when "delete" %>
+icon = delete_icon
+var markers = delmarkers;
+
+<% end %>
+
+marker_coords = new OpenLayers.LonLat(<%= error.lon %>,<%= error.lat %>);
+marker_coords.transform(wgs84, map.getProjectionObject());
+
+feature = new OpenLayers.Feature(layerMapnik, marker_coords, {icon: icon.clone()});
+marker = feature.createMarker();
+markers.addMarker(marker);
+
+popup<%= i %> = feature.createPopup(false);
+popup<%= i %>.setContentHTML("<%= "#{error.resolution.capitalize} the #{error.feature.name.downcase}." %>");
+markers.map.addPopup(popup<%= i %>);
+marker.events.register("mousedown", popup<%= i %>, popup<%= i %>.toggle);
+popup<%= i %>.setSize(new OpenLayers.Size(100,100));
+popup<%= i %>.toggle();
+<% end %>
 
 </script>
