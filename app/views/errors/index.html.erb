@@ -41,14 +41,13 @@ map.addControl(new OpenLayers.Control.MousePosition());
 
 var center = new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>);
 center.transform(wgs84, map.getProjectionObject());
-
 map.setCenter(center, <%= @location[:zoom] %>);
 
 var size = new OpenLayers.Size(18,25);
 var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-var add_icon = new OpenLayers.Icon('openlayers/img/add-feature.png',size,offset);
-var modify_icon = new OpenLayers.Icon('openlayers/img/modify-feature.png',size,offset);
-var delete_icon = new OpenLayers.Icon('openlayers/img/delete-feature.png',size,offset);
+var add_icon = new OpenLayers.Icon('/openlayers/img/add-feature.png',size,offset);
+var modify_icon = new OpenLayers.Icon('/openlayers/img/modify-feature.png',size,offset);
+var delete_icon = new OpenLayers.Icon('/openlayers/img/delete-feature.png',size,offset);
 
 updateMarkers();
 </script>

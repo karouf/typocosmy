@@ -1,0 +1,140 @@
+<div id="map" style="width: 60%;height: 30em;"></div>
+
+<div class="sidebar">
+	<div id="step1" class="step">
+		<h2>Step 1</h2>
+		<p>Pan the map and zoom in to the area where you've spotted an error. Then click the "Place a marker" button, drag the marker on the exact spot of the error and click "Done!"</p>
+	</div>
+
+	<div id="step2" class="step" style="display: none;">
+		<h2>Step 2</h2>
+		<p>Fill in the form below and submit. Remember that people correcting errors are from various countries but generally they're operating in their own country. Therefore if you're reporting an error in, say, Italy, please write in Italian if you can. If you can't, then in English or your own language.</p>
+	</div>
+
+	<form id="marker-controls" class="action" name="marker_controls" action="#" method="post">
+		<input name="create_marker" onclick="createMarker();return false;" type="button" value="Place a marker" />
+		<input name="clear_marker" onclick="clearMarker();return false;" type="button" value="Clear marker" />
+		<input name="save_marker" onclick="saveMarker();return false;" type="button" value="Done!" />
+	</form>
+
+	<div id="error-details" class="action" style="display: none;">
+		<% remote_form_for(@error, :html => { :name => "new_error" }) do |e| %>
+			<p>You need to <%= select("error", "resolution", Error.const_get("Resolutions").collect {|r| [ r[1], r[1] ] }, { :include_blank => false }) %> a <%= select("error", "feature_id", Feature.find(:all, :order => "name ASC").collect {|f| [ f.name.downcase, f.id ] }, { :include_blank => false }) %> here!</p>
+			<input type="hidden" id="error_lon" name="error[lon]" value="" />
+			<input type="hidden" id="error_lat" name="error[lat]" value="" />
+			<%= e.submit "Tell us!" %>
+		<% end %>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+function prepareStep(step) {
+	switch(step) {
+		case 1:	//show div#step1
+				//enable create_marker button
+				document.marker_controls.create_marker.disabled=false;
+				//disable clear_marker and save_marker buttons
+				document.marker_controls.clear_marker.disabled=true;
+				document.marker_controls.save_marker.disabled=true;
+				//show form#marker-controls
+				//hide div#step2
+				//hide form#error-details
+				break;
+		
+		case 2:	//show div#step2
+				document.getElementById("step2").show();
+				//show form#error-details
+				document.getElementById("error-details").show();
+				//hide div#step1
+				document.getElementById("step1").hide();
+				//hide form#marker-controls
+				document.getElementById("marker-controls").hide();
+				break;
+	}
+}
+
+function createMarker() {
+	if( marker == false ) {
+		//create the marker at the center of the map
+		markerLayer.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(map.center.lon, map.center.lat)));
+	
+		marker = true;
+	
+		//disable the create_marker button and enable the 2 others
+		document.marker_controls.create_marker.disabled=true;
+		document.marker_controls.clear_marker.disabled=false;
+		document.marker_controls.save_marker.disabled=false;
+		
+	} else {
+		alert("There's already a marker!")
+	}
+}
+
+function clearMarker() {
+	if( marker == true ) {
+		//delete the marker
+		markerLayer.clearMarkers();
+	
+		marker = false;
+	
+		//enable the create_marker button and disable the 2 others
+		document.marker_controls.create_marker.disabled=false;
+		document.marker_controls.clear_marker.disabled=true;
+		document.marker_controls.save_marker.disabled=true;
+	} else {
+		alert("No marker to clear!")
+	}
+}
+
+function saveMarker() {
+	if( marker == true ) {
+		//put the marker coords away in a var
+		marker_coords = markerLayer.markers.first().lonlat.transform(map.getProjectionObject(), wgs84)
+		document.new_error.error_lon.value=marker_coords.lon;
+		document.new_error.error_lat.value=marker_coords.lat;
+		
+		//go to step 2
+		prepareStep(2);
+	} else {
+		alert("No marker to save!")
+	}
+}
+
+var map;
+var step = 1;
+var marker = false;
+var marker_coords;
+var wgs84 = new OpenLayers.Projection('WGS84')
+
+prepareStep(1);
+
+map = new OpenLayers.Map('map',
+	{ controls: [],
+	maxExtent: new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508),
+	numZoomLevels: 18,
+	maxResolution: 156543,
+	units: 'm',
+	displayProjection: wgs84,
+	projection: "EPSG:41001"});
+
+
+var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
+map.addLayers([layerMapnik,layerTah]);
+
+var markerLayer = new OpenLayers.Layer.Markers("Marker");
+map.addLayer(markerLayer);
+
+map.addControl(new OpenLayers.Control.LayerSwitcher());
+map.addControl(new OpenLayers.Control.Navigation());
+map.addControl(new OpenLayers.Control.PanZoomBar());
+map.addControl(new OpenLayers.Control.MousePosition());
+
+
+var center = new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>);
+center.transform(wgs84, map.getProjectionObject());
+
+map.setCenter(center, <%= @location[:zoom] %>);
+
+</script>

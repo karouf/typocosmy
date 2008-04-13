@@ -58,7 +58,7 @@ Proj4js = {
      * TBD figure this out automatically
      */
     //libPath: '../lib/',
-	libPath: 'openlayers/lib/proj4js/lib/',
+	libPath: '/openlayers/lib/proj4js/lib/',
 
     /** 
     * Method: transform(source, dest, point)

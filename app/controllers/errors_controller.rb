@@ -6,6 +6,25 @@ class ErrorsController < ApplicationController
 		                      :conditions => "lon > -5.23 AND lon < 8.49 AND lat > 42.69 AND lat < 49.8",
 		                      :order => "created_at DESC", :limit => 1)	
 	end
+	
+	def new
+	  @location = {:lon => 0.60769, :lat => 46.36152, :zoom => 6}
+	  @error = Error.new
+	end
+	
+	def create
+	  @error = Error.new(params[:error])
+	  
+	  if @error.save
+	    @message = "Saved!"
+	  else
+	    @message = "Error: not saved!"
+	  end
+	  
+	  respond_to do |format|
+      format.js
+    end
+	end
 
   def update_markers
     left = params[:left]
