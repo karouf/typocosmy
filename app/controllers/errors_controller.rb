@@ -20,5 +20,9 @@ class ErrorsController < ApplicationController
 		                      :conditions => "lon > #{left} AND lon < #{right} AND lat > #{bottom} AND lat < #{top}",
 		                      :order => "created_at DESC", :limit => 3)
 		end
+		
+		respond_to do |format|
+      format.js
+    end
   end
 end
