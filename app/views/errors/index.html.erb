@@ -1,4 +1,12 @@
-<div id="map" style="width: 800px;height: 500px;border: 1px solid black;"></div>
+<div id="map" style="width: 60%;height: 30em;"></div>
+
+<div id="about" class="sidebar">
+	<p>Spotted an error on the OpenStreetMap? Take a look at the map on the right and zoom in to the area where you think there's an error to check if somebody hasn't reported it yet.</p>
+	<p>See the zoom bar on the left side of the map? When the slider is on the red zone, the map shows only the latest reported errors for the displayed area. When it is in the green zone, it displays all reported errors. That's why you need to zoom in to check whether your problem has already been reported or not.</p>
+	<p class="center button">
+		<%= link_to 'Report an error.', new_error_path() %>
+	</p>
+</div>
 
 <script type="text/javascript">
 

@@ -6,9 +6,19 @@
 		<script src="/openlayers/OpenStreetMap.js"></script>        	
 		<script src="/javascripts/prototype.js"></script>
 		<script src="/openlayers/lib/Typocosmy.js"></script>
+		<link rel="stylesheet" href="/stylesheets/typocosmy.css" />
 		
 	</head>
 	<body>
-		<%= yield %>
+		<div id="header">
+			<h1><a href="/errors">Typocosmy</a></h1>
+			<p>Beta :)</p>
+		</div>
+		
+		<div id="content">
+			<%= yield %>
+		</div>
+		
+		<div id="footer"></div>
 	</body>
 </html>
