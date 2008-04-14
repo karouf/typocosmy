@@ -87,6 +87,15 @@ body {
 	margin-bottom: 2em;
 }
 
+#step3 {
+	text-align: center;
+}
+
 .action {
 	text-align: center;
+}
+
+#done {
+	text-indent: 1em;
+	text-align: left;
 }

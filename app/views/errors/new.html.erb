@@ -10,6 +10,11 @@
 		<h2>Step 2</h2>
 		<p>Fill in the form below and submit. Remember that people correcting errors are from various countries but generally they're operating in their own country. Therefore if you're reporting an error in, say, Italy, please write in Italian if you can. If you can't, then in English or your own language.</p>
 	</div>
+	
+	<div id="step3" class="step" style="display: none;">
+		<h2>Done!</h2>
+		<p>Thanks a million!</p>
+	</div>
 
 	<form id="marker-controls" class="action" name="marker_controls" action="#" method="post">
 		<input name="create_marker" onclick="createMarker();return false;" type="button" value="Place a marker" />
@@ -25,31 +30,57 @@
 			<%= e.submit "Tell us!" %>
 		<% end %>
 	</div>
+	
+	<div id="done" class="action" style="display: none;">
+		<p>Now you can either <%= link_to 'report another error', '#', :onclick => 'prepareStep(1);return false;' %> or hop to <%= link_to 'the main OpenStreetMap website', 'http://openstreetmap.org' %> to look at some beautiful maps and maybe <%= link_to 'start to contribute', 'http://wiki.openstreetmap.org/index.php/Beginners%27_Guide' %>!</p>
+	</div>
 </div>
 
 <script type="text/javascript">
 
 function prepareStep(step) {
 	switch(step) {
-		case 1:	//show div#step1
-				//enable create_marker button
+		case 1:	if (marker) {
+					markerLayer.clearMarkers();
+				}
+				var marker_coords;
+				marker = false;
+
+				document.getElementById("step2").hide();
+				document.getElementById("error-details").hide();
+
+				document.getElementById("step3").hide();
+				document.getElementById("done").hide();
+
+				document.getElementById("step1").show();
+				document.getElementById("marker-controls").show();
+				
 				document.marker_controls.create_marker.disabled=false;
-				//disable clear_marker and save_marker buttons
 				document.marker_controls.clear_marker.disabled=true;
 				document.marker_controls.save_marker.disabled=true;
-				//show form#marker-controls
-				//hide div#step2
-				//hide form#error-details
+
 				break;
 		
-		case 2:	//show div#step2
-				document.getElementById("step2").show();
-				//show form#error-details
-				document.getElementById("error-details").show();
-				//hide div#step1
-				document.getElementById("step1").hide();
-				//hide form#marker-controls
+		case 2:	document.getElementById("step1").hide();
 				document.getElementById("marker-controls").hide();
+
+				document.getElementById("step3").hide();
+				document.getElementById("done").hide();
+		
+				document.getElementById("step2").show();
+				document.getElementById("error-details").show();
+				
+				break;
+				
+		case 3:	document.getElementById("step1").hide();
+				document.getElementById("marker-controls").hide();
+
+				document.getElementById("step2").hide();
+				document.getElementById("error-details").hide();
+
+				document.getElementById("step3").show();
+				document.getElementById("done").show();
+		
 				break;
 	}
 }
@@ -102,9 +133,7 @@ function saveMarker() {
 }
 
 var map;
-var step = 1;
 var marker = false;
-var marker_coords;
 var wgs84 = new OpenLayers.Projection('WGS84')
 
 prepareStep(1);

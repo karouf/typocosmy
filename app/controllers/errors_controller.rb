@@ -16,9 +16,9 @@ class ErrorsController < ApplicationController
 	  @error = Error.new(params[:error])
 	  
 	  if @error.save
-	    @message = "Saved!"
+	    @saved = true
 	  else
-	    @message = "Error: not saved!"
+	    @saved = false
 	  end
 	  
 	  respond_to do |format|
