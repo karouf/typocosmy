@@ -41,7 +41,7 @@
 function prepareStep(step) {
 	switch(step) {
 		case 1:	if (marker) {
-					markerLayer.clearMarkers();
+					markerLayer.removeFeatures(feature);
 				}
 				var marker_coords;
 				marker = false;
@@ -88,7 +88,21 @@ function prepareStep(step) {
 function createMarker() {
 	if( marker == false ) {
 		//create the marker at the center of the map
-		markerLayer.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(map.center.lon, map.center.lat)));
+		point = new OpenLayers.Geometry.Point(map.center.lon, map.center.lat);
+		style = {"graphicOpacity":1, 
+		 "externalGraphic":"/openlayers/img/marker.png", 
+		 "graphicXOffset":-10.5, 
+		 "graphicYOffset":-25, 
+		 "graphicWidth":21, 
+		 "graphicHeight":25, 
+		 "id":"error_marker", 
+		 "strokeLinecap":"round", 
+		 "strokeOpacity":1, 
+		 "fillOpacity":1, 
+		 "pointRadius":0};
+		feature = new OpenLayers.Feature.Vector(point, null, style);
+		
+		markerLayer.addFeatures([feature]);
 	
 		marker = true;
 	
@@ -105,7 +119,7 @@ function createMarker() {
 function clearMarker() {
 	if( marker == true ) {
 		//delete the marker
-		markerLayer.clearMarkers();
+		markerLayer.removeFeatures(feature);
 	
 		marker = false;
 	
@@ -121,9 +135,10 @@ function clearMarker() {
 function saveMarker() {
 	if( marker == true ) {
 		//put the marker coords away in a var
-		marker_coords = markerLayer.markers.first().lonlat.transform(map.getProjectionObject(), wgs84)
-		document.new_error.error_lon.value=marker_coords.lon;
-		document.new_error.error_lat.value=marker_coords.lat;
+		marker_coords = markerLayer.features.first().geometry.transform(map.getProjectionObject(), wgs84)
+		
+		document.new_error.error_lon.value=marker_coords.x;
+		document.new_error.error_lat.value=marker_coords.y;
 		
 		//go to step 2
 		prepareStep(2);
@@ -152,14 +167,17 @@ var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
 var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
 map.addLayers([layerMapnik,layerTah]);
 
-var markerLayer = new OpenLayers.Layer.Markers("Marker");
+//var markerLayer = new OpenLayers.Layer.Markers("Marker");
+markerLayer = new OpenLayers.Layer.Vector("Vector Layer");
 map.addLayer(markerLayer);
 
 map.addControl(new OpenLayers.Control.LayerSwitcher());
 map.addControl(new OpenLayers.Control.Navigation());
 map.addControl(new OpenLayers.Control.PanZoomBar());
 map.addControl(new OpenLayers.Control.MousePosition());
-
+dragfeature = new OpenLayers.Control.DragFeature(markerLayer);
+map.addControl(dragfeature);
+dragfeature.activate();
 
 var center = new OpenLayers.LonLat(<%= @location[:lon] %>,<%= @location[:lat] %>);
 center.transform(wgs84, map.getProjectionObject());
