@@ -40,14 +40,14 @@ delmarkers.clearMarkers();
     marker = feature.createMarker();
     markers.addMarker(marker);
 
-    popup<%= i %> = feature.createPopup(false);
+    popup<%= i %> = feature.createPopup(true);
     popup<%= i %>.setContentHTML('<%= error.resolution.capitalize %> the <%= error.feature.name.downcase %>.');
-  
+	popup<%= i %>.autoSize = true;
+	popup<%= i %>.div.style.display = "none";
+	
     markers.map.addPopup(popup<%= i %>);
-    popup<%= i %>.hide();
   
     marker.events.register('mousedown', popup<%= i %>, popup<%= i %>.toggle);
-    popup<%= i %>.setSize(new OpenLayers.Size(100,100));
   
   <% end %>
 <% end %>
