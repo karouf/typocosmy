@@ -24,7 +24,7 @@
 
 	<div id="error-details" class="action" style="display: none;">
 		<% remote_form_for(@error, :html => { :name => "new_error" }) do |e| %>
-			<p>You need to <%= select("error", "resolution", Error.const_get("Resolutions").collect {|r| [ r[1], r[1] ] }, { :include_blank => false }) %> a <%= select("error", "feature_id", Feature.find(:all, :order => "name ASC").collect {|f| [ f.name.downcase, f.id ] }, { :include_blank => false }) %> here!</p>
+			<p>You need to <%= select("error", "resolution", Error.const_get("Resolutions").sort{|a,b| a[1]<=>b[1]}.collect {|r| [ r[1], r[1] ] }, { :include_blank => false }) %> a <%= select("error", "feature_id", Feature.find(:all, :order => "name ASC").collect {|f| [ f.name.downcase, f.id ] }, { :include_blank => false }) %> here!</p>
 			<input type="hidden" id="error_lon" name="error[lon]" value="" />
 			<input type="hidden" id="error_lat" name="error[lat]" value="" />
 			<%= e.submit "Tell us!" %>
