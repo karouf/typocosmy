@@ -25,8 +25,8 @@
 	<div id="error-details" class="action" style="display: none;">
 		<% remote_form_for(@error, :html => { :name => "new_error" }) do |e| %>
 			<p>You need to <%= select("error", "resolution", Error.const_get("Resolutions").sort{|a,b| a[1]<=>b[1]}.collect {|r| [ r[1], r[1] ] }, { :include_blank => false }) %> a <%= select("error", "feature_id", Feature.find(:all, :order => "name ASC").collect {|f| [ f.name.downcase, f.id ] }, { :include_blank => false }) %> here!</p>
-			<input type="hidden" id="error_lon" name="error[lon]" value="" />
-			<input type="hidden" id="error_lat" name="error[lat]" value="" />
+			<input type="hidden" id="lon" name="lon" value="" />
+			<input type="hidden" id="lat" name="lat" value="" />
 			<%= e.submit "Tell us!" %>
 		<% end %>
 	</div>
@@ -137,8 +137,8 @@ function saveMarker() {
 		//put the marker coords away in a var
 		marker_coords = markerLayer.features.first().geometry.transform(map.getProjectionObject(), wgs84)
 		
-		document.new_error.error_lon.value=marker_coords.x;
-		document.new_error.error_lat.value=marker_coords.y;
+		document.new_error.lon.value=marker_coords.x;
+		document.new_error.lat.value=marker_coords.y;
 		
 		//go to step 2
 		prepareStep(2);

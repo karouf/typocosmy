@@ -9,21 +9,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080408201135) do
+ActiveRecord::Schema.define(:version => 20080417185549) do
 
   create_table "errors", :force => true do |t|
-    t.string   "resolution"
-    t.integer  "feature_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "lon",        :precision => 9, :scale => 6
-    t.decimal  "lat",        :precision => 9, :scale => 6
+    t.column "resolution", :string
+    t.column "feature_id", :integer
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+    t.column "location", :point, :null => false
   end
 
   create_table "features", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.column "name", :string
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
   end
 
 end

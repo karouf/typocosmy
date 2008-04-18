@@ -33,7 +33,7 @@ delmarkers.clearMarkers();
 
     <% end %>
 
-    marker_coords = new OpenLayers.LonLat(<%= error.lon %>, <%= error.lat %>);
+    marker_coords = new OpenLayers.LonLat(<%= error.location.x %>, <%= error.location.y %>);
     marker_coords.transform(wgs84, map.getProjectionObject());
 
     feature = new OpenLayers.Feature(layerMapnik, marker_coords, {icon: icon.clone()});
