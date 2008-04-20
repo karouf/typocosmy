@@ -9,3 +9,4 @@ tmp/sockets/*
 Capfile
 config/deploy.rb
 config/mongrel_cluster.yml
+.DS_Store
