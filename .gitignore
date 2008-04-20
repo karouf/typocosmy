@@ -10,3 +10,4 @@ Capfile
 config/deploy.rb
 config/mongrel_cluster.yml
 .DS_Store
+app/geoip/*.dat

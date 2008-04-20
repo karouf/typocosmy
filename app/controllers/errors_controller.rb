@@ -1,5 +1,7 @@
-class ErrorsController < ApplicationController
+require 'geoip'
 
+class ErrorsController < ApplicationController
+  
 	def index
 		@location = location_from_params(params)
 	end
@@ -51,7 +53,20 @@ private
     if params[:lon] && params[:lat] && params [:zoom]
       location = { :lon => params[:lon], :lat => params[:lat], :zoom => params[:zoom] }
     else
-      location = {:lon => 0.60769, :lat => 46.36152, :zoom => 6}
+      begin
+        geoip = GeoIP.new("#{RAILS_ROOT}/app/geoip/GeoLiteCity.dat")
+        remote = geoip.city(request.remote_ip)
+        if remote[10] > 180 || remote[10] < -180 || remote[9] > 90 || remote[9] < -90
+          location = {:lon => 0, :lat => 0, :zoom => 1}
+        else
+          location = {:lon => remote[10], :lat => remote[9], :zoom => 6}
+        end
+      rescue
+        location = {:lon => 0, :lat => 0, :zoom => 1}
+      end
+      else
+        location = {:lon => 0, :lat => 0, :zoom => 1}
+      end
     end
     return location
   end
