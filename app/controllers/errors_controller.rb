@@ -1,11 +1,11 @@
 class ErrorsController < ApplicationController
 
 	def index
-		@location = {:lon => 0.60769, :lat => 46.36152, :zoom => 6}
+		@location = location_from_params(params)
 	end
 	
 	def new
-	  @location = {:lon => 0.60769, :lat => 46.36152, :zoom => 6}
+	  @location = location_from_params(params)
 	  @error = Error.new
 	end
 	
@@ -42,4 +42,16 @@ class ErrorsController < ApplicationController
       format.js
     end
   end
+  
+private
+
+  def location_from_params(params)
+    if params[:lon] && params[:lat] && params [:zoom]
+      location = { :lon => params[:lon], :lat => params[:lat], :zoom => params[:zoom] }
+    else
+      location = {:lon => 0.60769, :lat => 46.36152, :zoom => 6}
+    end
+    return location
+  end
+  
 end

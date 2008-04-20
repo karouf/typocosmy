@@ -1,5 +1,13 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :errors
+  
+  map.home '/', :controller => 'errors', :action => 'index'
+  map.connect 'report-a-bug/:lon/:lat/:zoom', :controller => 'errors', :action => 'new',
+                                  :lon => /\-{0,1}\d{1,3}(\.\d*|)/,
+                                  :lat => /\-{0,1}\d{1,2}(\.\d*|)/,
+                                  :zoom => /\d{1,2}/
+                      
+  map.report 'report-a-bug', :controller => 'errors', :action => 'new'
 
   # The priority is based upon order of creation: first created -> highest priority.
 
