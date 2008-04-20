@@ -11,10 +11,10 @@ class ErrorsController < ApplicationController
 	
 	def create
 	  @error = Error.new(params[:error])
-	  lon = params[:lon]
-	  lat = params[:lat]
+	  lon = params[:lon].to_f
+	  lat = params[:lat].to_f
 	  
-	  @error.location = Point.new(lon, lat)
+	  @error.location = Point.from_lon_lat(lon, lat)
 	  
 	  @error.author_ip = request.remote_ip
 	  
