@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080418191830) do
+ActiveRecord::Schema.define(:version => 20080420141445) do
 
   create_table "errors", :force => true do |t|
     t.column "resolution", :string
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20080418191830) do
     t.column "location", :point, :null => false
     t.column "comment", :text
     t.column "email", :string
+    t.column "author_ip", :string
   end
 
   create_table "features", :force => true do |t|

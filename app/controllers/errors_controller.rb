@@ -16,6 +16,8 @@ class ErrorsController < ApplicationController
 	  
 	  @error.location = Point.new(lon, lat)
 	  
+	  @error.author_ip = request.remote_ip
+	  
 	  if @error.save
 	    @saved = true
 	  else
