@@ -24,7 +24,11 @@
 
 	<div id="error-details" class="action" style="display: none;">
 		<% remote_form_for(@error, :html => { :name => "new_error" }) do |e| %>
-			<p>You need to <%= select("error", "resolution", Error.const_get("Resolutions").sort{|a,b| a[1]<=>b[1]}.collect {|r| [ r[1], r[1] ] }, { :include_blank => false }) %> a <%= select("error", "feature_id", Feature.find(:all, :order => "name ASC").collect {|f| [ f.name.downcase, f.id ] }, { :include_blank => false }) %> here!</p>
+			<p>"You need to <%= select("error", "resolution", Error.const_get("Resolutions").sort{|a,b| a[1]<=>b[1]}.collect {|r| [ r[1], r[1] ] }, { :include_blank => false }) %> a <%= select("error", "feature_id", Feature.find(:all, :order => "name ASC").collect {|f| [ f.name.downcase, f.id ] }, { :include_blank => false }) %> here!"</p>
+			<p>Please leave a comment for more details:
+			<%= e.text_area :comment, :rows => 5 %></p>
+			<p>...and an e-mail address so we can get back to you for further information.
+			<%= e.text_field :email %></p>
 			<input type="hidden" id="lon" name="lon" value="" />
 			<input type="hidden" id="lat" name="lat" value="" />
 			<%= e.submit "Tell us!" %>
