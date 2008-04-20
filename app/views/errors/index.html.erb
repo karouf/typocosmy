@@ -37,11 +37,19 @@ var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
 var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
 map.addLayers([layerMapnik,layerTah]);
 
-var addmarkers = new OpenLayers.Layer.Markers( "Features to add" );
+var numZoomLevels = Math.max(layerMapnik.numZoomLevels, layerTah.numZoomLevels);
+
+var addmarkers = new OpenLayers.Layer.Markers( "Features to add", {
+      numZoomLevels: numZoomLevels
+   });
 map.addLayer(addmarkers);
-var modmarkers = new OpenLayers.Layer.Markers( "Features to modify" );
+var modmarkers = new OpenLayers.Layer.Markers( "Features to modify", {
+      numZoomLevels: numZoomLevels
+   });
 map.addLayer(modmarkers);
-var delmarkers = new OpenLayers.Layer.Markers( "Features to delete" );
+var delmarkers = new OpenLayers.Layer.Markers( "Features to delete", {
+      numZoomLevels: numZoomLevels
+   });
 map.addLayer(delmarkers);
 
 map.addControl(new OpenLayers.Control.LayerSwitcher());

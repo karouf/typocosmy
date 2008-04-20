@@ -171,8 +171,11 @@ var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
 var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
 map.addLayers([layerMapnik,layerTah]);
 
-//var markerLayer = new OpenLayers.Layer.Markers("Marker");
-markerLayer = new OpenLayers.Layer.Vector("Vector Layer");
+var numZoomLevels = Math.max(layerMapnik.numZoomLevels, layerTah.numZoomLevels);
+
+markerLayer = new OpenLayers.Layer.Vector("Vector Layer", {
+      numZoomLevels: numZoomLevels
+   });
 map.addLayer(markerLayer);
 
 map.addControl(new OpenLayers.Control.LayerSwitcher());
