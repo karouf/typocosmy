@@ -64,9 +64,6 @@ private
       rescue
         location = {:lon => 0, :lat => 0, :zoom => 1}
       end
-      else
-        location = {:lon => 0, :lat => 0, :zoom => 1}
-      end
     end
     return location
   end
