@@ -1,6 +1,6 @@
 <% if @saved %>
 prepareStep(3);
 <% else %>
-alert("Something bad happened and the map bug you reported couldn't be saved!! You'll be taken back to step 1.");
+alert("<%= "Something bad happened and the map bug you reported couldn't be saved!! You'll be taken back to step 1.".t %>");
 prepareStep(1);
 <% end %>

@@ -1,10 +1,10 @@
 <div id="map" style="width: 60%;height: 30em;"></div>
 
 <div id="about" class="sidebar">
-	<p>Spotted an error on the OpenStreetMap? Take a look at the map on the right and zoom in to the area where you think there's an error to check if somebody hasn't reported it yet.</p>
-	<p>See the zoom bar on the left side of the map? When the slider is on the red zone, the map shows only the latest reported errors for the displayed area. When it is in the green zone, it displays all reported errors. That's why you need to zoom in to check whether your problem has already been reported or not.</p>
+	<p><%= "Spotted an error on the OpenStreetMap? Take a look at the map on the right and zoom in to the area where you think there's an error to check if somebody hasn't reported it yet.".t %></p>
+	<p><%= "See the zoom bar on the left side of the map?".t %> <%= "When the slider is on the red zone, the map shows only the latest reported errors for the displayed area. When it is in the green zone, it displays all reported errors.".t %> <%= "That's why you need to zoom in to check whether your problem has already been reported or not.".t %></p>
 	<p class="center button">
-		<a href="<%= url_for report_path %>">Report an error.</a>
+		<a href="<%= url_for report_path %>"><%= "Report an error.".t %></a>
 	</p>
 </div>
 
@@ -33,21 +33,21 @@ map = new OpenLayers.Map('map',
 	projection: "EPSG:41001"});
 
 
-var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
-var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
+var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("<%= "Mapnik".t %>");
+var layerTah = new OpenLayers.Layer.OSM.Osmarender("<%= "Tiles@Home".t %>");
 map.addLayers([layerMapnik,layerTah]);
 
 var numZoomLevels = Math.max(layerMapnik.numZoomLevels, layerTah.numZoomLevels);
 
-var addmarkers = new OpenLayers.Layer.Markers( "Features to add", {
+var addmarkers = new OpenLayers.Layer.Markers( "<%= "Features to add".t %>", {
       numZoomLevels: numZoomLevels
    });
 map.addLayer(addmarkers);
-var modmarkers = new OpenLayers.Layer.Markers( "Features to modify", {
+var modmarkers = new OpenLayers.Layer.Markers( "<%= "Features to modify".t %>", {
       numZoomLevels: numZoomLevels
    });
 map.addLayer(modmarkers);
-var delmarkers = new OpenLayers.Layer.Markers( "Features to delete", {
+var delmarkers = new OpenLayers.Layer.Markers( "<%= "Features to delete".t %>", {
       numZoomLevels: numZoomLevels
    });
 map.addLayer(delmarkers);

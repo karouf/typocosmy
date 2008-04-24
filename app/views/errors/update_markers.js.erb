@@ -41,7 +41,7 @@ delmarkers.clearMarkers();
     markers.addMarker(marker);
 
     popup<%= i %> = feature.createPopup(true);
-    popup<%= i %>.setContentHTML('<%= error.resolution.capitalize %> the <%= error.feature.name.downcase %>.');
+    popup<%= i %>.setContentHTML('<%= "Action: %s" / error.resolution.t.downcase %> <br /> <%= "Object: %s" / error.feature.name.downcase %>');
 	popup<%= i %>.autoSize = true;
 	popup<%= i %>.div.style.display = "none";
 	

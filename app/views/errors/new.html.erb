@@ -2,41 +2,43 @@
 
 <div class="sidebar">
 	<div id="step1" class="step">
-		<h2>Step 1</h2>
-		<p>Pan the map and zoom in to the area where you've spotted an error. Then click the "Place a marker" button, drag the marker on the exact spot of the error and click "Done!"</p>
+		<h2><%= "Step 1".t %></h2>
+		<p><%= "Pan the map and zoom in to the area where you've spotted an error.".t %> <%= "Then click the 'Place a marker' button, drag the marker on the exact spot of the error and click 'Done!'".t %></p>
 	</div>
 
 	<div id="step2" class="step" style="display: none;">
-		<h2>Step 2</h2>
-		<p>Fill in the form below and submit. Remember that people correcting errors are from various countries but generally they're operating in their own country. Therefore if you're reporting an error in, say, Italy, please write in Italian if you can. If you can't, then in English or your own language.</p>
+		<h2><%= "Step 2".t %></h2>
+		<p><%= "Fill in the form below and submit.".t %> <%= "Remember that people correcting errors are from various countries but generally they're operating in their own country.".t %> <%= "Therefore if you're reporting an error in, say, Italy, please write in Italian if you can.".t %> <%= "If you can't, then in English or your own language.".t %></p>
 	</div>
 	
 	<div id="step3" class="step" style="display: none;">
-		<h2>Done!</h2>
-		<p>Thanks a million!</p>
+		<h2><%= "Done!".t %></h2>
+		<p><%= "Thanks a million!".t %></p>
 	</div>
 
 	<form id="marker-controls" class="action" name="marker_controls" action="#" method="post">
-		<input name="create_marker" onclick="createMarker();return false;" type="button" value="Place a marker" />
-		<input name="clear_marker" onclick="clearMarker();return false;" type="button" value="Clear marker" />
-		<input name="save_marker" onclick="saveMarker();return false;" type="button" value="Done!" />
+		<input name="create_marker" onclick="createMarker();return false;" type="button" value="<%= "Place a marker".t %>" />
+		<input name="clear_marker" onclick="clearMarker();return false;" type="button" value="<%= "Clear marker".t %>" />
+		<input name="save_marker" onclick="saveMarker();return false;" type="button" value="<%= "Done!".t %>" />
 	</form>
 
 	<div id="error-details" class="action" style="display: none;">
 		<% remote_form_for(@error, :html => { :name => "new_error" }) do |e| %>
-			<p>"You need to <%= select("error", "resolution", Error.const_get("Resolutions").sort{|a,b| a[1]<=>b[1]}.collect {|r| [ r[1], r[1] ] }, { :include_blank => false }) %> a <%= select("error", "feature_id", Feature.find(:all, :order => "name ASC").collect {|f| [ f.name.downcase, f.id ] }, { :include_blank => false }) %> here!"</p>
-			<p>Please leave a comment for more details:
+			<p><%= "What do we need to do for the map to be correct?".t %></p>
+			<p><%= "Action: ".t %><%= select("error", "resolution", Error.const_get("Resolutions").sort{|a,b| a[1]<=>b[1]}.collect {|r| [ r[1].t.capitalize, r[1] ] }, { :include_blank => false }) %></p>
+			<p><%= "Object: ".t %><%= select("error", "feature_id", Feature.find(:all, :order => "name ASC").collect {|f| [ f.name.capitalize, f.id ] }, { :include_blank => false }) %></p>
+			<p><%= "Please leave a comment for more details: ".t %>
 			<%= e.text_area :comment, :rows => 5 %></p>
-			<p>...and an e-mail address so we can get back to you for further information.
+			<p><%= "...and an e-mail address so we can get back to you for further information.".t %>
 			<%= e.text_field :email %></p>
 			<input type="hidden" id="lon" name="lon" value="" />
 			<input type="hidden" id="lat" name="lat" value="" />
-			<%= e.submit "Tell us!" %>
+			<%= e.submit "Tell us!".t %>
 		<% end %>
 	</div>
 	
 	<div id="done" class="action" style="display: none;">
-		<p>Now you can either <%= link_to 'report another error', '#', :onclick => 'prepareStep(1);return false;' %> or hop to <%= link_to 'the main OpenStreetMap website', 'http://openstreetmap.org' %> to look at some beautiful maps and maybe <%= link_to 'start to contribute', 'http://wiki.openstreetmap.org/index.php/Beginners%27_Guide' %>!</p>
+		<p><%= "Now you can either %s " / link_to("report another error".t, '#', :onclick => 'prepareStep(1);return false;') %><%= "or hop to %s to look at some beautiful maps " / link_to("the main OpenStreetMap website".t, 'http://openstreetmap.org') %><%= "and maybe %s!" / link_to("start to contribute".t, "http://wiki.openstreetmap.org/index.php/Beginners_Guide".t) %></p>
 	</div>
 </div>
 
@@ -116,7 +118,7 @@ function createMarker() {
 		document.marker_controls.save_marker.disabled=false;
 		
 	} else {
-		alert("There's already a marker!")
+		alert("<%= "There's already a marker!".t %>")
 	}
 }
 
@@ -132,7 +134,7 @@ function clearMarker() {
 		document.marker_controls.clear_marker.disabled=true;
 		document.marker_controls.save_marker.disabled=true;
 	} else {
-		alert("No marker to clear!")
+		alert("<%= "No marker to clear!".t %>")
 	}
 }
 
@@ -147,7 +149,7 @@ function saveMarker() {
 		//go to step 2
 		prepareStep(2);
 	} else {
-		alert("No marker to save!")
+		alert("<%= "No marker to save!".t %>")
 	}
 }
 
@@ -167,14 +169,15 @@ map = new OpenLayers.Map('map',
 	projection: "EPSG:41001"});
 
 
-var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
-var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
+var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("<%= "Mapnik".t %>");
+var layerTah = new OpenLayers.Layer.OSM.Osmarender("<%= "Tiles@Home".t %>");
 map.addLayers([layerMapnik,layerTah]);
 
 var numZoomLevels = Math.max(layerMapnik.numZoomLevels, layerTah.numZoomLevels);
 
-markerLayer = new OpenLayers.Layer.Vector("Vector Layer", {
-      numZoomLevels: numZoomLevels
+markerLayer = new OpenLayers.Layer.Vector("<%= "Marker".t %>", {
+	numZoomLevels: numZoomLevels,
+	displayInLayerSwitcher: false
    });
 map.addLayer(markerLayer);
 
