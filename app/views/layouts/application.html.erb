@@ -7,12 +7,13 @@
 		<script src="/javascripts/prototype.js"></script>
 		<script src="/openlayers/lib/Typocosmy.js"></script>
 		<link rel="stylesheet" href="/stylesheets/typocosmy.css" />
-		
+
 	</head>
 	<body>
 		<div id="header">
-			<h1><a href="/">Typocosmy</a></h1>
+			<h1><%= link_to "Typocosmy", home_path %></h1>
 			<p>Beta :)</p>
+			<p id="lang-switcher"><%= "Language: ".t %><%= select("language", "lang", LOCALES.to_a.sort{|a,b| a[1]<=>b[1]}.collect {|r| [ Language.pick(r[1]).native_name.capitalize, r[0] ] }, { :include_blank => false, :selected => Locale.active.language.code }, :onchange => "remoteUrl = '/' + document.getElementById('locale').value + '/errors/update_locale';#{remote_function(:with => "'locale=' + document.getElementById('locale').value + '&redirect=' + window.location.pathname", :url => "' + remoteUrl + '")};return false;", :id => "locale" ) %></p>
 		</div>
 		
 		<div id="content">

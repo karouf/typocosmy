@@ -44,6 +44,12 @@ body {
 	letter-spacing: 0.4em;
 }
 
+p#lang-switcher {
+	margin-left: 70%;
+	margin-top: -4.5em;
+	letter-spacing: 0em;
+}
+
 #content {
 	padding: 1.5em;
 }

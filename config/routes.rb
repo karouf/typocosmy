@@ -1,14 +1,17 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :errors
+  map.resources :errors, :path_prefix => ':locale', :locale => /[a-zA-Z]{2}|/
   
-  map.home '/', :controller => 'errors', :action => 'index'
-  map.connect 'report-a-bug/:lon/:lat/:zoom', :controller => 'errors', :action => 'new',
-                                  :lon => /\-{0,1}\d{1,3}(\.\d*|)/,
-                                  :lat => /\-{0,1}\d{1,2}(\.\d*|)/,
+  map.home '/:locale/', :controller => 'errors', :action => 'index', :locale => /[a-zA-Z]{2}|/
+  map.connect '/:locale/report-a-bug/:lon/:lat/:zoom', :controller => 'errors', :action => 'new',
+                                  :locale => /[a-zA-Z]{2}|/,
+                                  :lon => /\-{0,1}\d{1,3}(\.\d{1,8}|)/,
+                                  :lat => /\-{0,1}\d{1,2}(\.\d{1,8}|)/,
                                   :zoom => /\d{1,2}/
                       
-  map.report 'report-a-bug', :controller => 'errors', :action => 'new'
-
+  map.report '/:locale/report-a-bug', :controller => 'errors', :action => 'new', :locale => /[a-zA-Z]{2}|/
+  
+  map.connect ':locale/:controller/:action/:id', :locale => /[a-zA-Z]{2}|/
+  map.connect ':locale/:controller/:action/:id.:format', :locale => /[a-zA-Z]{2}|/
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
