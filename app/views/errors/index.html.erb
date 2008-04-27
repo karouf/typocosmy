@@ -14,7 +14,7 @@ function updateMarkers() {
 	bbox = map.getExtent();
 	bbox.transform(map.getProjectionObject(), wgs84);
 	
-    <%= remote_function(:with => "'zoom=' + map.zoom + '&left=' + bbox.left + '&bottom=' + bbox.bottom + '&right=' + bbox.right + '&top=' + bbox.top", :url => { :action => :update_markers }) %>
+    <%= remote_function(:with => "'zoom=' + map.zoom + '&left=' + bbox.left + '&bottom=' + bbox.bottom + '&right=' + bbox.right + '&top=' + bbox.top", :url => { :action => 'update_markers' }) %>
 
 	position = new OpenLayers.LonLat( map.center.lon, map.center.lat ).transform( map.getProjectionObject(), wgs84 );
 	document.getElementById('about').getElementsBySelector('p.button a').first().href = '<%= url_for report_path %>/' + position.lon + '/' + position.lat + '/' + map.zoom ;
