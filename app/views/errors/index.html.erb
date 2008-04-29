@@ -30,7 +30,8 @@ map = new OpenLayers.Map('map',
 	maxResolution: 156543,
 	units: 'm',
 	displayProjection: wgs84,
-	projection: "EPSG:41001"});
+	projection: "EPSG:41001",
+	theme: '/openlayers/theme/default/style.css'});
 
 
 var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("<%= "Mapnik".t %>");

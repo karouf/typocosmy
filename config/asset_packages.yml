@@ -1,0 +1,16 @@
+--- 
+javascripts: 
+- base: 
+  - prototype
+  - effects
+  - dragdrop
+  - controls
+  - application
+- openlayers:
+  - OpenLayers
+  - proj4js
+  - OpenStreetMap
+  - Typocosmy
+stylesheets: 
+- base: 
+  - typocosmy

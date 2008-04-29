@@ -1,12 +1,8 @@
 <html>
 	<head>
 		<title><%= "Report a map bug".t %> - Typocosmy</title>
-		<script src="/openlayers/lib/OpenLayers.js"></script>
-		<script src="/openlayers/lib/proj4js/lib/proj4js.js"></script>
-		<script src="/openlayers/OpenStreetMap.js"></script>        	
-		<script src="/javascripts/prototype.js"></script>
-		<script src="/openlayers/lib/Typocosmy.js"></script>
-		<link rel="stylesheet" href="/stylesheets/typocosmy.css" />
+		<%= javascript_include_merged 'prototype', :openlayers %>
+		<%= stylesheet_link_merged :base %>
 
 	</head>
 	<body>
