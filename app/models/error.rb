@@ -1,5 +1,6 @@
 class Error < ActiveRecord::Base
   belongs_to :feature
+  belongs_to :user
 
   Resolutions = {
   :add => "add", 

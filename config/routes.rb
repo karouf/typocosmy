@@ -15,7 +15,9 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/:locale/login', :controller => 'sessions', :action => 'new'
   map.register '/:locale/register', :controller => 'users', :action => 'create'
   map.signup '/:locale/signup', :controller => 'users', :action => 'new'
+  
   map.resources :users, :path_prefix => ':locale', :locale => /[a-zA-Z]{2}|/
+  map.my_mapbugs '/:locale/my-mapbugs', :controller => 'users', :action => 'my_errors'
   
   map.resource :session, :path_prefix => ':locale', :locale => /[a-zA-Z]{2}|/
   

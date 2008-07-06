@@ -32,9 +32,14 @@ body {
 	margin-bottom: 0em;
 }
 
-#header a {
+#header h1 a {
 	color: white;
 	text-decoration: none;
+}
+
+#header a {
+	color: white;
+	text-decoration: underline;
 }
 
 #header p {

@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   
-    # render new.rhtml
+  before_filter :login_required, :only => :my_errors
+  
+  # render new.rhtml
   def new
     @user = User.new
   end
@@ -21,5 +23,9 @@ class UsersController < ApplicationController
       flash[:error]  = "We couldn't set up that account, sorry.  Please try again, or contact an admin (link is above)."
       render :action => 'new'
     end
+  end
+  
+  def my_errors
+    @errors = Error.find(:all, :conditions => "user_id = #{current_user.id}")
   end
 end

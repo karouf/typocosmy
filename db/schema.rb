@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 2147483647) do
     t.column "comment", :text
     t.column "email", :string
     t.column "author_ip", :string
+    t.column "user_id", :integer
   end
 
   create_table "features", :force => true do |t|

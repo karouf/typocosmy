@@ -1,0 +1,9 @@
+<h2><%= "My reported errors".t %></h2>
+
+<% if !@errors.empty? %>
+<ul>
+	<% for error in @errors %>
+	<li><abbr title="<%= error.created_at %>"><%= error.created_at.strftime("%d/%m/%Y %H:%M".t) %></abbr> <%= error.resolution.capitalize + " " + error.feature.name.downcase %></li>
+	<% end %>
+</ul>
+<% end %>
