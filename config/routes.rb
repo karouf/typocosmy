@@ -1,4 +1,11 @@
 ActionController::Routing::Routes.draw do |map|
+  map.logout '/logout', :controller => 'sessions', :action => 'destroy'
+  map.login '/login', :controller => 'sessions', :action => 'new'
+  map.register '/register', :controller => 'users', :action => 'create'
+  map.signup '/signup', :controller => 'users', :action => 'new'
+  map.resources :users
+  
+  map.resource :session
   map.resources :errors, :path_prefix => ':locale', :locale => /[a-zA-Z]{2}|/
   
   map.home '/:locale/', :controller => 'errors', :action => 'index', :locale => /[a-zA-Z]{2}|/
@@ -12,6 +19,8 @@ ActionController::Routing::Routes.draw do |map|
   
   map.connect ':locale/:controller/:action/:id', :locale => /[a-zA-Z]{2}|/
   map.connect ':locale/:controller/:action/:id.:format', :locale => /[a-zA-Z]{2}|/
+
+  
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
