@@ -25,9 +25,11 @@ body {
 #header h1 {
 	font-family: Monaco, Verdana, sans-serif;
 	font-size: 300%;
+	float: left;
 	position: relative;
 	top: -1.5em;
 	left: 1.1em;
+	margin-bottom: 0em;
 }
 
 #header a {
@@ -48,6 +50,20 @@ p#lang-switcher {
 	margin-left: 70%;
 	margin-top: -4.5em;
 	letter-spacing: 0em;
+}
+
+#toolbar {
+	list-style: none;
+	margin-left: 450px;
+	position: relative;
+	top: -4em;
+	right: 3em;
+	float: right;
+}	
+
+#toolbar li {
+	float: left;
+	margin-left: 1em;
 }
 
 #content {

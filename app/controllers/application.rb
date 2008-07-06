@@ -4,6 +4,9 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
+  # restful-authentication lib
+  include AuthenticatedSystem
+  
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '078533f518536dca9a7df88847852494'

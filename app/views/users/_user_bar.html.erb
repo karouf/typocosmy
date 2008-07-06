@@ -1,8 +1,10 @@
 <% if logged_in? -%>
-  <div id="user-bar-greeting"><%= "Logged in as ".t %><%= link_to_current_user :content_method => :login %></div>
+  <div id="user-bar-greeting"><%= "Logged in as ".t %><%= current_user.login #link_to_current_user :content_method => :login
+ %></div>
   <div id="user-bar-action"  >(<%= link_to "log out".t, logout_path, { :title => "Log out".t }    %>)</div>
 <% else -%>
-  <div id="user-bar-greeting"><%= abbr_tag_with_IP 'Not logged in'.t, :style => 'border: none;' %></div>
+  <div id="user-bar-greeting"><%= "Not logged in".t #abbr_tag_with_IP 'Not logged in'.t, :style => 'border: none;' 
+%></div>
   <div id="user-bar-action"  ><%= link_to "Log in".t,  login_path,  { :title => "Log in".t } %> /
                                <%= link_to "Sign up".t, signup_path, { :title => "Create an account".t } %></div>
 <% end -%>
