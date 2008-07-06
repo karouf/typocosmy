@@ -1,19 +1,19 @@
-<h1>Sign up as a new user</h1>
+<h1><%= "Sign up as a new user".t %></h1>
 <% @user.password = @user.password_confirmation = nil %>
 
 <%= error_messages_for :user %>
 <% form_for :user, :url => { :controller => 'users', :action => 'create'} do |f| -%>
-<p><label for="login">Login</label><br/>
+<p><label for="login"><%= "Login".t %></label><br/>
 <%= f.text_field :login %></p>
 
-<p><label for="email">Email</label><br/>
+<p><label for="email"><%= "Email".t %></label><br/>
 <%= f.text_field :email %></p>
 
-<p><label for="password">Password</label><br/>
+<p><label for="password"><%= "Password".t %></label><br/>
 <%= f.password_field :password %></p>
 
-<p><label for="password_confirmation">Confirm Password</label><br/>
+<p><label for="password_confirmation"><%= "Confirm Password".t %></label><br/>
 <%= f.password_field :password_confirmation %></p>
 
-<p><%= submit_tag 'Sign up' %></p>
+<p><%= submit_tag 'Sign up'.t %></p>
 <% end -%>

@@ -1,10 +1,10 @@
-<h1>Log In</h1>
+<h1><%= "Log In".t %></h1>
 
 <% form_tag session_path do -%>
-<p><label for="login">Login</label><br/>
+<p><label for="login"><%= "Login".t %></label><br/>
 <%= text_field_tag 'login', @login %></p>
 
-<p><label for="password">Password</label><br/>
+<p><label for="password"><%= "Password".t %></label><br/>
 <%= password_field_tag 'password', nil %></p>
 
 <!-- Uncomment this if you want this functionality
@@ -12,5 +12,5 @@
 <%= check_box_tag 'remember_me', '1', @remember_me %></p>
 -->
 
-<p><%= submit_tag 'Log in' %></p>
+<p><%= submit_tag 'Log in'.t %></p>
 <% end -%>
